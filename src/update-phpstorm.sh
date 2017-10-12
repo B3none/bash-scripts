@@ -1,23 +1,21 @@
-#!/bin/bash -e
+#!/bin/bash
 
-echo -n "Please enter the PhpStorm download url: "
-read url
- 
-# Download file from url
-echo "Downloading PhpStorm to ~/Desktop"
-cd ~/Desktop
-wget ${url} --no-check-certificate
-tar -xzf ~/Desktop/PhpStorm*
-rm ~/Desktop/PhpStorm*
+if [ "$(whoami)" != "root" ]
+then
+    echo "You must run this command with sudo."
+    exit 1
+fi
 
-# Remove old Phpstorm
+echo "Downloading the latest PhpStorm to /tmp"
+cd /tmp
+curl -Lo PhpStorm.tar.gz "https://data.services.jetbrains.com/products/download?code=PS&platform=linux"
+tar -xzf /tmp/PhpStorm.tar.gz
+rm /tmp/PhpStorm.tar.gz
+
 echo "Removing old PhpStorm"
-rm -rf ~/Documents/PhpStorm
+rm -rf ~/Documents/Phpstorm
 
-# Copy new Phpstorm
 echo "Copying new PhpStorm"
-mv ~/Desktop/PhpStorm* ~/Documents/PhpStorm
+mv /tmp/PhpStorm* ~/Documents/Phpstorm
 
-# Finish
-echo "New PhpStorm has been installed!"
-
+echo "New PhpStorm has been installed"
